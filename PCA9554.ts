@@ -1,13 +1,22 @@
 
 //
+enum PinModes {
+    //% block="Input"
+    //% block="Output"
 
+}
 namespace pca9554 {
-    const PCA9554_ADDRESS  = 0x20
-    const PCA9554_REG_INP  = 0
-    const PCA9554_REG_OUT  = 1
-    const PCA9554_REG_POL  = 2
-    const PCA9554_REG_CTRL = 3
 
+    const PCA9554_ADDRESS  = 0x20
+    const PCA9554_REG_INP  = 0x00
+    const PCA9554_REG_OUT  = 0x01
+    const PCA9554_REG_POL  = 0x02
+    const PCA9554_REG_CTRL = 0x03
+
+  m_inp = readRegister(PCA9554_ADDRESS, PCA9554_REG_INP);
+  m_out = readRegister(PCA9554_ADDRESS, PCA9554_REG_OUT);
+  m_pol = readRegister(PCA9554_ADDRESS, PCA9554_REG_POL);
+  m_ctrl = readRegister(PCA9554_ADDRESS, PCA9554_REG_CTRL);
 
     function i2cwrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
@@ -28,15 +37,7 @@ namespace pca9554 {
         return val;
     }
 
-    function initPCA9685(): void {
-        i2cwrite(PCA9554_ADDRESS, 0x00)
-        setFreq(500);
-        setPwm(0, 0, 4095);
-        for (let idx = 1; idx < 16; idx++) {
-            setPwm(idx, 0, 0);
-        }
-        initialized = true
-    }
+    function pca9554_PinMode(pin: number, mode:string) {
 
-    function pca9554
+    }
 }
