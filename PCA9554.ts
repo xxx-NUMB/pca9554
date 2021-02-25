@@ -2,21 +2,54 @@
 //
 enum PinModes {
     //% block="Input"
+    INPUT = 0x1,
     //% block="Output"
+    OUTPUT = 0x2,
+}
 
+enum Polarity {
+    //% block="Ieverted"
+    INVERTED = 0x1,
+    //% block="Normal"
+    NORMAL = 0x2,
+}
+
+enum DigitalValue{
+    //% block="1"
+    HIGH = 0x1,
+    //% block="0"
+    LOW = 0x2,
+}
+
+enum Extend_Pin {
+    //% block="P0"
+    extend_Pin0 = 0x01,
+    //% block="P1"
+    extend_Pin1 = 0x02,
+    //% block="P2"
+    extend_Pin2 = 0x04,
+    //% block="P3"
+    extend_Pin3 = 0x08,
+    //% block="P4"
+    extend_Pin4 = 0x10,
+    //% block="P5"
+    extend_Pin5 = 0x20,
+    //% block="P6"
+    extend_Pin6 = 0x40,
+    //% block="P7"
+    extend_Pin8 = 0x80,
 }
 namespace pca9554 {
-
     const PCA9554_ADDRESS  = 0x20
     const PCA9554_REG_INP  = 0x00
     const PCA9554_REG_OUT  = 0x01
     const PCA9554_REG_POL  = 0x02
     const PCA9554_REG_CTRL = 0x03
 
-  m_inp = readRegister(PCA9554_ADDRESS, PCA9554_REG_INP);
-  m_out = readRegister(PCA9554_ADDRESS, PCA9554_REG_OUT);
-  m_pol = readRegister(PCA9554_ADDRESS, PCA9554_REG_POL);
-  m_ctrl = readRegister(PCA9554_ADDRESS, PCA9554_REG_CTRL);
+    let mode_inp:number
+    let mode_out:number
+    let mode_pol:number
+    let mode_ctrl:number
 
     function i2cwrite(addr: number, reg: number, value: number) {
         let buf = pins.createBuffer(2)
@@ -37,7 +70,54 @@ namespace pca9554 {
         return val;
     }
 
-    function pca9554_PinMode(pin: number, mode:string) {
+    function pca9554_beging():void {
 
+        mode_inp = i2cread(PCA9554_ADDRESS, PCA9554_REG_INP);
+        mode_out = i2cread(PCA9554_ADDRESS, PCA9554_REG_OUT);
+        mode_pol = i2cread(PCA9554_ADDRESS, PCA9554_REG_POL);
+        mode_ctrl = i2cread(PCA9554_ADDRESS, PCA9554_REG_CTRL);
+    }
+
+    //% block="set extend pin |%pin as %mode"
+    function pca9554_pinMode(pin: Extend_Pin, mode:PinModes) {
+        
+        if (mode == 1) {
+            mode_ctrl |= ~pin;
+        } else if (mode == 2) {
+            mode_ctrl &= pin;
+        } else {
+            return false;
+        }
+        i2cwrite(PCA9554_ADDRESS, PCA9554_REG_CTRL, mode_ctrl);
+        return true;
+    }
+
+    //% block="set Polarity |%pin as %polarity"
+    function pca9554_pinPolarity(pin: Extend_Pin, polarity: Polarity){
+        if (polarity == 1) {
+            mode_pol |= pin;
+        } else if (polarity == 2) {
+            mode_pol &= ~pin;
+        } else {
+            return false;
+        }
+        i2cwrite(PCA9554_ADDRESS, PCA9554_REG_POL, mode_pol);
+        return true;
+    }
+
+    //% block="Read digital pin |%pin as %val"
+    function pca9554_digitalWrite(pin: Extend_Pin, val:DigitalValue){
+        if (val == 1) {
+            mode_out |= pin;
+        } else {
+            mode_out &= ~pin;
+        }
+        i2cwrite(PCA9554_ADDRESS, PCA9554_REG_OUT, mode_out);
+    }
+
+    //% block="Read digital pin |%pin"
+    function pca9554_digitalRead(pin:Extend_Pin)
+    {
+        return ((i2cread(PCA9554_ADDRESS, PCA9554_REG_INP) & pin) != 0);
     }
 }
