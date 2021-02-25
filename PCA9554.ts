@@ -1,5 +1,3 @@
-
-//
 enum PinModes {
     //% block="Input"
     INPUT = 0x1,
@@ -79,7 +77,7 @@ namespace pca9554 {
     }
 
     //% block="set extend pin |%pin as %mode"
-    function pca9554_pinMode(pin: Extend_Pin, mode:PinModes) {
+    export function pca9554_pinMode(pin: Extend_Pin, mode:PinModes) {
         
         if (mode == 1) {
             mode_ctrl |= ~pin;
@@ -93,7 +91,7 @@ namespace pca9554 {
     }
 
     //% block="set Polarity |%pin as %polarity"
-    function pca9554_pinPolarity(pin: Extend_Pin, polarity: Polarity){
+    export function pca9554_pinPolarity(pin: Extend_Pin, polarity: Polarity){
         if (polarity == 1) {
             mode_pol |= pin;
         } else if (polarity == 2) {
@@ -106,7 +104,7 @@ namespace pca9554 {
     }
 
     //% block="Read digital pin |%pin as %val"
-    function pca9554_digitalWrite(pin: Extend_Pin, val:DigitalValue){
+    export function pca9554_digitalWrite(pin: Extend_Pin, val:DigitalValue){
         if (val == 1) {
             mode_out |= pin;
         } else {
@@ -116,7 +114,7 @@ namespace pca9554 {
     }
 
     //% block="Read digital pin |%pin"
-    function pca9554_digitalRead(pin:Extend_Pin)
+    export function pca9554_digitalRead(pin:Extend_Pin)
     {
         return ((i2cread(PCA9554_ADDRESS, PCA9554_REG_INP) & pin) != 0);
     }
