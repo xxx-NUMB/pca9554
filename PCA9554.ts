@@ -112,7 +112,12 @@ namespace pca9554 {
     }
 
     //% block="Read digital pin |%pin"
-    export function pca9554_digitalRead(pin:Extend_Pin):boolean{
-        return ((i2cread(PCA9554_ADDRESS, PCA9554_REG_INP) & pin) != 0);
+    export function pca9554_digitalRead(pin:Extend_Pin):number {
+        if((i2cread(PCA9554_ADDRESS, PCA9554_REG_INP) & pin) != 0){
+            return 1
+        }
+        else {
+            return 0
+        }
     }
 }
