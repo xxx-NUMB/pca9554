@@ -77,37 +77,32 @@ namespace pca9554 {
     }
 
     //% block="set extend pin |%pin as %mode"
-    export function pca9554_pinMode(pin: Extend_Pin, mode:PinModes) {
+    export function pca9554_pinMode(pin: Extend_Pin, mode:PinModes):void {
         pca9554_beging();
 
         if (mode == 1) {
             mode_ctrl |= ~pin;
         } else if (mode == 2) {
             mode_ctrl &= pin;
-        } else {
-            return false;
-        }
+        } 
         i2cwrite(PCA9554_ADDRESS, PCA9554_REG_CTRL, mode_ctrl);
-        return true;
     }
 
     //% block="set Polarity |%pin as %polarity"
-    export function pca9554_pinPolarity(pin: Extend_Pin, polarity: Polarity){
+    export function pca9554_pinPolarity(pin: Extend_Pin, polarity: Polarity):void{
         pca9554_beging();
         if (polarity == 1) {
             mode_pol |= pin;
         } else if (polarity == 2) {
             mode_pol &= ~pin;
-        } else {
-            return false;
-        }
+        } 
         i2cwrite(PCA9554_ADDRESS, PCA9554_REG_POL, mode_pol);
-        return true;
     }
 
     //% block="Write digital pin |%pin as %val"
-    export function pca9554_digitalWrite(pin: Extend_Pin, val:DigitalValue){
-        pca9554_beging()
+    export function pca9554_digitalWrite(pin: Extend_Pin, val:DigitalValue):void{
+        pca9554_beging();
+        
         if (val == 1) {
             mode_out |= pin;
         } else {
@@ -117,8 +112,7 @@ namespace pca9554 {
     }
 
     //% block="Read digital pin |%pin"
-    export function pca9554_digitalRead(pin:Extend_Pin)
-    {
+    export function pca9554_digitalRead(pin:Extend_Pin):boolean{
         return ((i2cread(PCA9554_ADDRESS, PCA9554_REG_INP) & pin) != 0);
     }
 }
