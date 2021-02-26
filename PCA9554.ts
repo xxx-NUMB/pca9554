@@ -78,7 +78,8 @@ namespace pca9554 {
 
     //% block="set extend pin |%pin as %mode"
     export function pca9554_pinMode(pin: Extend_Pin, mode:PinModes) {
-        
+        pca9554_beging();
+
         if (mode == 1) {
             mode_ctrl |= ~pin;
         } else if (mode == 2) {
@@ -92,6 +93,7 @@ namespace pca9554 {
 
     //% block="set Polarity |%pin as %polarity"
     export function pca9554_pinPolarity(pin: Extend_Pin, polarity: Polarity){
+        pca9554_beging();
         if (polarity == 1) {
             mode_pol |= pin;
         } else if (polarity == 2) {
@@ -103,8 +105,9 @@ namespace pca9554 {
         return true;
     }
 
-    //% block="Read digital pin |%pin as %val"
+    //% block="Write digital pin |%pin as %val"
     export function pca9554_digitalWrite(pin: Extend_Pin, val:DigitalValue){
+        pca9554_beging()
         if (val == 1) {
             mode_out |= pin;
         } else {

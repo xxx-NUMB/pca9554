@@ -8,9 +8,9 @@
     },
     "files": [
         "main.blocks",
-        "main.ts",
         "README.md",
-        "PCA9554.ts"
+        "PCA9554.ts",
+        "main.ts"
     ],
     "testFiles": [
         "test.ts"
